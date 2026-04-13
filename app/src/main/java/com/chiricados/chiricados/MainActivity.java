@@ -1,20 +1,21 @@
 package com.chiricados.chiricados;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.webkit.WebSettings;
-import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+
 import im.delight.android.webview.AdvancedWebView;
 
-public class MainActivity extends Activity implements AdvancedWebView.Listener {
+public class MainActivity extends AppCompatActivity implements AdvancedWebView.Listener {
 
     private AdView mAdView;
     private AdvancedWebView mWebView;
@@ -24,49 +25,42 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWebView = (AdvancedWebView) findViewById(R.id.webview);
+        mWebView = findViewById(R.id.webview);
         mWebView.setListener(this, this);
         mWebView.setDesktopMode(false);
 
         WebSettings webSettings = mWebView.getSettings();
-
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setUseWideViewPort(true);
 
         // Stop local links and redirects from opening in browser instead of WebView
-        mWebView.setWebViewClient(new MyWebViewClient() );
+        mWebView.setWebViewClient(new MyWebViewClient());
         mWebView.loadUrl("https://chiricados.com/");
 
         // Load Ads
-        MobileAds.initialize(this, "ca-app-pub-8152195151581989~9415230688");
-        mAdView = (AdView) findViewById(R.id.adView);
+        MobileAds.initialize(this, initializationStatus -> {});
+        mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
-
     }
-
 
     @SuppressLint("NewApi")
     @Override
     protected void onResume() {
         super.onResume();
         mWebView.onResume();
-        // ...
     }
 
     @SuppressLint("NewApi")
     @Override
     protected void onPause() {
         mWebView.onPause();
-        // ...
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
         mWebView.onDestroy();
-        // ...
         super.onDestroy();
     }
 
@@ -74,13 +68,11 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         mWebView.onActivityResult(requestCode, resultCode, intent);
-        // ...
     }
 
     @Override
     public void onBackPressed() {
         if (!mWebView.onBackPressed()) { return; }
-        // ...
         super.onBackPressed();
     }
 
@@ -98,12 +90,7 @@ public class MainActivity extends Activity implements AdvancedWebView.Listener {
 
     @Override
     public void onExternalPageRequest(String url) {
-
         Toast.makeText(MainActivity.this, "No se puede navegar a este sitio.",
                 Toast.LENGTH_LONG).show();
     }
-
-
-
-
 }
