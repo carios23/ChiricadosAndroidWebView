@@ -9,4 +9,7 @@
 /captures
 .externalNativeBuild
 app/release/
+app/upload-keystore.jks
+*.jks
+*.keystore
 .claude/
